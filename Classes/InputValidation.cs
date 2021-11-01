@@ -9,7 +9,7 @@ namespace EmployeeDataManager.Classes
         private static readonly int TITLEMAX = 100;
         private static readonly int NAMEMIN = 1;
         private static readonly int TITLEMIN = 1;
-        private static readonly List<string> COMMANDS = new List<string> { "add", "update", "delete", "new", "exit", "help", "list", "save", "load" };
+        private static readonly List<string> COMMANDS = new List<string> { "add", "update", "delete", "new", "exit", "help", "list" };
 
         // Checks for a valid name and returns it otherwise returns null.
         public static string CheckName(string name)

@@ -5,7 +5,7 @@ namespace EmployeeDataManager.Classes
 {
     static class CommonDisplays
     {
-        private static readonly List<string> COMMANDS = new List<string> { "Add", "Update", "Delete", "List", "New", "Save", "Load", "Help", "Exit" };
+        private static readonly List<string> COMMANDS = new List<string> { "Add", "Update", "Delete", "List", "New", "Help", "Exit" };
 
         // prints full command list
         public static void PrintCommands()
@@ -101,7 +101,11 @@ namespace EmployeeDataManager.Classes
             Console.Write("      Employee List\n");
             Console.Write("  ---------------------\n");
         }
-        
+        public static void PositionPrompt()
+        {
+            Console.Write("  Position: ");
+        }
+
 
         // AddEmployee ------------------------------------------------------------------------------------------------------------------
 
@@ -144,10 +148,22 @@ namespace EmployeeDataManager.Classes
             Console.WriteLine($"  Employee {name}'s name has been updated to {newName}.\n");
         }
 
-        public static void UpdateTitleConfirmation(string title, string newTitle)
+        public static void UpdateNameConfirmationCheck(string name, string newName)
         {
-            Console.WriteLine($"  Employee {title}'s name has been updated to {newTitle}.\n");
+            Console.WriteLine($"  Are you sure you want to update employee {name}'s name to {newName} as the value?");
+            Console.Write("  y/n: ");
         }
+
+        public static void UpdateTitleConfirmationCheck(string name, string newTitle)
+        {
+            Console.WriteLine($"  Are you sure you want to update employee {name}'s title to {newTitle} as the value?");
+            Console.Write("  y/n: ");
+        }
+        public static void UpdateTitleConfirmation(string name, string newTitle)
+        {
+            Console.WriteLine($"  Employee {name}'s title has been updated to {newTitle}.\n");
+        }
+
 
         public static void UpdateEmployeeStop()
         {
@@ -156,7 +172,64 @@ namespace EmployeeDataManager.Classes
 
         public static void UpdateEmployeePrompt()
         {
+            Console.WriteLine("  Please input the position of the employee to update.");
+        }
 
+        public static void UpdateEmployeeInvalidAmount()
+        {
+            Console.WriteLine($"  Sorry there are no employees to update.");
+        }
+
+        public static void UpdateEmployeeRetry()
+        {
+            Console.WriteLine("  Retrying update operation.");
+        }
+
+        public static void UpdateEmployeeRetry(int pos)
+        {
+            Console.WriteLine($"  Retrying update operation for employee at pos {pos}.");
+        }
+
+        public static void UpdateEmployeeNamePrompt()
+        {
+            Console.WriteLine("  Press enter to skip updating the employee name.");
+            Console.Write("  New name:  ");
+        }
+        public static void UpdateEmployeeTitlePrompt()
+        {
+            Console.WriteLine("  Press enter to skip updating the employee title.");
+            Console.Write("  New title:  ");
+        }
+
+        public static void UpdateEmployeeSkipName()
+        {
+            Console.WriteLine("  Skipping name update.");
+        }
+
+        public static void UpdateEmployeeSkipTitle()
+        {
+            Console.WriteLine("  Skipping title update.");
+        }
+
+        public static void UpdateEmployeeSkip()
+        {
+            Console.WriteLine("  All update operations skipped.");
+        }
+
+        public static void UpdateEmployeeFullConfirmation(string name, string newName, string title, string newTitle, int pos)
+        {
+            Console.WriteLine($"  Are you sure you want to update the employee at position {pos} with these values\n" +
+                $"  Original Name: {name},  Original Title: {title}\n" +
+                $"  New Name: {newName},  New Title: {newTitle}");
+            Console.Write("  y/n: ");
+        }
+
+        public static void UpdateEmployeeFull(string name, string newName, string title, string newTitle, int pos)
+        {
+            Console.WriteLine($"  Updated employee at position {pos} with these values\n" +
+                $"  Original Name: {name},  Original Title: {title}\n" +
+                $"  New Name: {newName},  New Title: {newTitle}\n" +
+                $"  Be advised the Employee maybe in a new position to maintain order.");
         }
 
         // DeleteEmployee ------------------------------------------------------------------------------------------------------------
@@ -172,11 +245,6 @@ namespace EmployeeDataManager.Classes
         public static void DeleteEmployeeInvalidAmount()
         {
             Console.WriteLine($"  Sorry there are no employees to delete.");
-        }
-
-        public static void DeletePositionPrompt()
-        {
-            Console.Write("  Position: ");
         }
 
         public static void DeleteInvalidPosition(int max)

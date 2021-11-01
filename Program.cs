@@ -34,8 +34,8 @@ namespace EmployeeDataManager
             
         }
         
-        // Gets a valid employee name
-        public static string GetName()
+        // Helper function that gets a valid employee name for Add().
+        private static string GetNameForAdd()
         {
             while (true)
             {
@@ -52,13 +52,59 @@ namespace EmployeeDataManager
             }
         }
 
-        // Gets valid employee title returns null if invalid
-        public static string GetTitle()
+        // Helper function that gets a valid employee title for Add().
+        private static string GetTitleForAdd()
         {
             while (true)
             {
                 CommonDisplays.TitlePrompt();
                 string title = Console.ReadLine();
+                title = InputValidation.CheckTitle(title);
+
+                if (title != null)
+                {
+                    return title;
+                }
+
+                CommonDisplays.InvalidTitle();
+            }
+        }
+
+        // Helper function that gets a valid employee name for Update().
+        private static string GetNameForUpdate()
+        {
+            while (true)
+            {
+                CommonDisplays.NamePrompt();
+                string name = Console.ReadLine();
+                if (name == "")
+                {
+                    return null;
+                }
+
+                name = InputValidation.CheckName(name);
+
+                if (name != null)
+                {
+                    return name;
+                }
+
+                CommonDisplays.InvalidName();
+            }
+        }
+
+        // Helper function that gets a valid employee title for Update().
+        private static string GetTitleForUpdate()
+        {
+            while (true)
+            {
+                CommonDisplays.TitlePrompt();
+                string title = Console.ReadLine();
+                if (title == "")
+                {
+                    return null;
+                }
+
                 title = InputValidation.CheckTitle(title);
 
                 if (title != null)
@@ -76,7 +122,7 @@ namespace EmployeeDataManager
         {
             while (true)
             {
-                CommonDisplays.DeletePositionPrompt();
+                CommonDisplays.PositionPrompt();
                 string sAns = Console.ReadLine();
 
                 if (GetStop(sAns))
@@ -113,7 +159,7 @@ namespace EmployeeDataManager
             CommonDisplays.AddEmployeePrompt();
             while (true)
             {
-                string name = GetName();
+                string name = GetNameForAdd();
                 if (GetStop(name))
                 {
                     CommonDisplays.AddEmployeeStop();
@@ -121,7 +167,7 @@ namespace EmployeeDataManager
                 }
                 else if ( name != null)
                 {
-                    string title = GetTitle();
+                    string title = GetTitleForAdd();
                     if (GetStop(title))
                     {
                         CommonDisplays.AddEmployeeStop();
@@ -222,20 +268,116 @@ namespace EmployeeDataManager
 
         public static void Update()
         {
-            CommonDisplays.UpdateEmployeePrompt();
+            if (employees.Amount == 0)
+            {
+                CommonDisplays.UpdateEmployeeInvalidAmount();
+            }
+            else
+            {
+                int pos;
+                CommonDisplays.EmployeeListTitle();
+                Console.WriteLine(employees);
+                CommonDisplays.UpdateEmployeePrompt();
+
+                while (true)
+                {
+                    pos = GetPos();
+                    if (pos == -2)
+                    {
+                        CommonDisplays.UpdateEmployeeStop();
+                        return;
+                    }
+                    else
+                    {
+                        pos -= 1;
+                        Employee person = employees.GetEmployeeAtPos(pos);
+                        while (true)
+                        {
+                            string name = GetNameForUpdate();
+                            if (name == null)
+                            {
+                                CommonDisplays.UpdateEmployeeSkipName();
+                            }
+                            else if (GetStop(name))
+                            {
+                                CommonDisplays.UpdateEmployeeStop();
+                                return;
+                            }
+
+                            string title = GetTitleForUpdate();
+                            if (title == null)
+                            {
+                                CommonDisplays.UpdateEmployeeSkipTitle();
+                            }
+                            else if (GetStop(title))
+                            {
+                                CommonDisplays.UpdateEmployeeStop();
+                                return;
+                            }
+                            if (name == null && title == null)
+                            {
+                                CommonDisplays.UpdateEmployeeSkip();
+                                break;
+
+                            }
+                            else if (name != null && title != null)
+                            {
+                                CommonDisplays.UpdateEmployeeFullConfirmation(person.GetName(), 
+                                    name, person.GetTitle(), title, pos + 1);
+                                int ans = InputValidation.CheckYN(Console.ReadLine());
+                                if (ans == 0 || ans == -1)
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    employees.DeleteEmployeeAtPos(pos);
+                                    employees.AddEmployee(name, title);
+                                    CommonDisplays.UpdateEmployeeFull(person.GetName(),
+                                       name, person.GetTitle(), title, pos + 1);
+                                    return;
+                                }
+                            }
+                            else if (name != null)
+                            {
+                                CommonDisplays.UpdateNameConfirmationCheck(person.GetName(), name);
+                                int ans = InputValidation.CheckYN(Console.ReadLine());
+                                if (ans == 0 || ans == -1)
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    employees.DeleteEmployeeAtPos(pos);
+                                    employees.AddEmployee(name, person.GetTitle());
+                                    CommonDisplays.UpdateNameConfirmation(person.GetName(), name);
+                                    return;
+                                }
+                            }
+                            else if (title != null)
+                            {
+                                CommonDisplays.UpdateTitleConfirmationCheck(person.GetName(), title);
+                                int ans = InputValidation.CheckYN(Console.ReadLine());
+                                if (ans == 0 || ans == -1)
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    employees.UpdateEmployeeTitleAtPos(pos, title);
+                                    CommonDisplays.UpdateTitleConfirmation(person.GetName(), title);
+                                    return;
+                                }
+                            }
+                            CommonDisplays.UpdateEmployeeRetry(pos + 1);
+                        }
+                    }
+                    CommonDisplays.UpdateEmployeeRetry();
+                }
+            }
+            
         }
 
-        // Saves employees to a file
-        public static void Save()
-        {
-            //FileOperations.Save(employees, "save1");
-        }
-
-        // Loads employees from a file
-        public static void Load()
-        {
-
-        }
         static void Main(string[] args)
         {
             
@@ -245,7 +387,6 @@ namespace EmployeeDataManager
 
             while (true)
             {
-                Console.WriteLine(employees.Amount);
                 CommonDisplays.CommandPrompt();
                 string command = InputValidation.CheckCommand(Console.ReadLine().ToLower());
                 if (command == null)
@@ -280,14 +421,6 @@ namespace EmployeeDataManager
                 else if (command == "update")
                 {
                     Update();
-                }
-                else if (command == "save")
-                {
-                    Save();
-                }
-                else if (command == "load")
-                {
-                    Load();
                 }
                 CommonDisplays.ContinuePrompt();
                 Console.ReadKey();

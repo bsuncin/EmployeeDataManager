@@ -154,7 +154,7 @@ namespace EmployeeDataManager.Classes
             }
         }
 
-        public void UpdateEmployeeTitleAtPos(int pos, string newTitle) => EmployeeList[pos].SetName(newTitle);
+        public void UpdateEmployeeTitleAtPos(int pos, string newTitle) => EmployeeList[pos].SetTitle(newTitle);
 
         public override string ToString()
         {
