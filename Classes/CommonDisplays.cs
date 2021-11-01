@@ -33,6 +33,7 @@ namespace EmployeeDataManager.Classes
         public static void WelcomeMessage()
         {
             Console.WriteLine("  Welcome below you will find a list of valid commands.\n");
+            Console.WriteLine("  You can type stop at any point to end the current command process.\n");
             PrintCommands();
         }
 
@@ -51,6 +52,7 @@ namespace EmployeeDataManager.Classes
             Console.WriteLine("  Update: Changes the name or title for a current employee in the employee database.\n");
             Console.WriteLine("  List: Show all employees in the current database.\n");
             Console.WriteLine("  Exit: Closes the program.\n");
+            Console.WriteLine("  Stop: Ends the currently running process.\n");
         }
 
         // prints user command prompt
