@@ -194,12 +194,12 @@ namespace EmployeeDataManager.Classes
 
         public static void UpdateEmployeeNamePrompt()
         {
-            Console.WriteLine("  Press enter to skip updating the employee name.");
+            Console.WriteLine("  Leave blank to skip updating the employee name.");
             Console.Write("  New name:  ");
         }
         public static void UpdateEmployeeTitlePrompt()
         {
-            Console.WriteLine("  Press enter to skip updating the employee title.");
+            Console.WriteLine("  Leave blank to skip updating the employee title.");
             Console.Write("  New title:  ");
         }
 
